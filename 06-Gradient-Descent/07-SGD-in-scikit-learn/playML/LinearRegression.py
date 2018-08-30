@@ -71,18 +71,21 @@ class LinearRegression:
             return X_b_i * (X_b_i.dot(theta) - y_i) * 2.
 
         def sgd(X_b, y, initial_theta, n_iters=5, t0=5, t1=50):
-
+            # n_iters表示要对所有样本循环看几次
             def learning_rate(t):
                 return t0 / (t + t1)
 
             theta = initial_theta
             m = len(X_b)
             for i_iter in range(n_iters):
+                # 对所有样本都看一遍且样本序列是随机的，对原始样本进行乱序排序
                 indexes = np.random.permutation(m)
                 X_b_new = X_b[indexes,:]
                 y_new = y[indexes]
                 for i in range(m):
                     gradient = dJ_sgd(theta, X_b_new[i], y_new[i])
+                    # i_iter为第几遍遍历整个样本
+                    # i_iter * m + i  为  当前遍历次数 * 样本个数 + 当前本轮遍历次数
                     theta = theta - learning_rate(i_iter * m + i) * gradient
 
             return theta
